@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // --- Page-specific initialization functions ---
+    // --- Define Elements and Media Query ---
+    const header = document.querySelector('.main-header');
+    const navPlaceholder = document.getElementById('nav-placeholder');
+    const contentPlaceholder = document.getElementById('content-placeholder');
+    const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
 
+    // --- Page-specific initialization functions ---
     function initHomePage() {
         const pfSpan = document.getElementById('platform');
         if (pfSpan) {
@@ -23,8 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function initWeatherPage() {
         const tableBody = document.getElementById('weather-table');
         if (tableBody) {
-            // Clear existing table data to prevent duplicates on re-load
-            tableBody.innerHTML = ''; 
+            tableBody.innerHTML = '';
             const summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
             const today = new Date();
             for (let i = 0; i < 5; i++) {
@@ -40,19 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // --- Core SPA navigation and content loading ---
-
-    // Fetches and injects the navigation menu
-    function loadNav() {
-        fetch('nav.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('nav-placeholder').innerHTML = html;
-            })
-            .catch(error => console.error('Error fetching nav.html:', error));
-    }
-
-    // Fetches and injects content, then runs the correct init script
+    // --- Core SPA & Navigation Logic ---
     function loadContent(page) {
         fetch(`pages/${page}.html`)
             .then(response => {
@@ -60,9 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.text();
             })
             .then(html => {
-                document.getElementById('content-placeholder').innerHTML = html;
-                
-                // After loading, run the script for that page
+                contentPlaceholder.innerHTML = html;
                 switch (page) {
                     case 'home': initHomePage(); break;
                     case 'counter': initCounterPage(); break;
@@ -71,24 +61,56 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch(error => {
                 console.error(`Error fetching page ${page}:`, error);
-                document.getElementById('content-placeholder').innerHTML = '<h2>Page Not Found</h2>';
+                contentPlaceholder.innerHTML = '<h2>Page Not Found</h2>';
             });
     }
-    
-    // --- NEW: Hash-based Router ---
 
-    // This function runs when the page loads or the hash changes
+    function loadNav() {
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(html => {
+                navPlaceholder.innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching nav.html:', error));
+    }
+
+    // --- Layout, Routing, and Menu Toggle Logic ---
     function handleRouteChange() {
-        // Get the page name from the hash, or default to 'home'
-        // e.g., #about -> "about"
         const page = window.location.hash.substring(1) || 'home';
         loadContent(page);
     }
 
-    // Listen for hash changes (e.g., user clicks a link)
-    window.addEventListener('hashchange', handleRouteChange);
+    function handleResponsiveLayout(event) {
+        if (event.matches) {
+            // Screen is MOBILE: move nav inside the header
+            header.appendChild(navPlaceholder);
+        } else {
+            // Screen is DESKTOP: move nav back to be a child of the body, before the main content
+            document.body.insertBefore(navPlaceholder, contentPlaceholder);
+        }
+    }
+
+    function initMenuToggle() {
+        const menuToggle = document.getElementById('menu-toggle');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navPlaceholder.classList.toggle('is-open');
+            });
+            navPlaceholder.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A' || e.target.closest('a')) {
+                    navPlaceholder.classList.remove('is-open');
+                }
+            });
+        }
+    }
 
     // --- Initial Page Load ---
     loadNav();
-    handleRouteChange(); // Handle initial page load (e.g., if user opens /#about directly)
+    initMenuToggle();
+
+    mobileMediaQuery.addEventListener('change', handleResponsiveLayout);
+    handleResponsiveLayout(mobileMediaQuery); // Run once on load
+
+    handleRouteChange(); // Handle initial page route
+    window.addEventListener('hashchange', handleRouteChange); // Listen for route changes
 });

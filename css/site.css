@@ -1,63 +1,110 @@
-/* html,body{height:100%;margin:0} */
-html { height:100%;margin:0 }
-
-
-
-/* ====== BODY ======================================================= */
+/* Global Styles & Box Model Reset */
+html {
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
 body {
-    display: flex;       /* Use Flexbox for layout */
-    flex-direction: row; /* Arrange items side-by-side */
-    height: 100vh;       /* Set height to 100% of the viewport height */
-    margin: 0;           /* Remove the default browser margin */
+    margin: 0;
 }
 
-/* Style for the navigation placeholder */
+/* =================================================================== */
+/* DESKTOP-FIRST LAYOUT (Default Styles)                               */
+/* =================================================================== */
+
+body {
+    display: flex; /* Desktop has a side-by-side flex layout */
+}
+
+/* Hide the mobile header on desktop */
+.main-header {
+    display: none;
+}
+
+/* Desktop sidebar styles */
 #nav-placeholder {
-    width: 250px;        /* Give the navigation a fixed width */
-    flex-shrink: 0;      /* Prevent the navigation from shrinking */
-    background: #1e1e1e; /* Example background color */
-    color: white;        /* Example text color */
-    /* padding: 20px;  <-- Causes the nav menu to be off somewhat */
+    width: 260px;
+    flex-shrink: 0;
+    background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
 }
 
-/* Style for the main content area */
+#nav-placeholder a {
+    display: block;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+}
+
+#nav-placeholder a:hover {
+    background: rgba(255, 255, 255, .2);
+}
+
+/* Desktop content area styles */
 #content-placeholder {
-    flex-grow: 1;        /* Allow this area to grow and fill remaining space */
-    overflow-y: auto;    /* Add a scrollbar ONLY to this area if content is too long */
-    padding: 20px 40px;  /* Add some padding for spacing */
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 100vh;
+    padding: 20px 40px;
 }
 
-/* ====== SIDEBAR ======================================================= */
-.sidebar{
-  width:260px;
-  min-height:100vh;
-  background:linear-gradient(to bottom,#041b6e 0%,#2d006d 50%,#5b0060 100%);
-}
-.sidebar .nav-link{
-  color:#fff;
-  border-radius:.25rem;
-}
-.sidebar .nav-link.active,
-.sidebar .nav-link:hover{
-  background:rgba(255,255,255,.2);
-}
 
-/* ====== TYPOGRAPHY ==================================================== */
-:root{
-  --bs-body-font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-}
-html,body{
-  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-}
-h1,h2,h3,h4,h5,h6{
-  font-weight:600;
-  line-height:1.2;
-}
-h1{font-size:2.5rem;margin-bottom:.5rem;}
-h2{font-size:2rem;margin-bottom:.5rem;}
-h3{font-size:1.75rem;}
+/* =================================================================== */
+/* MOBILE LAYOUT (For screens 768px wide or less)                      */
+/* =================================================================== */
 
-/* ====== LAYOUT ======================================================== */
-.content{
-    padding-top:1.1rem;   /* same as .NET MAUI Blazor’s app.css */
+@media (max-width: 768px) {
+    /* On mobile, use a normal top-to-bottom block layout */
+    body {
+        display: block;
+    }
+
+    /* Show the mobile header */
+    .main-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        background: #333;
+        color: white;
+        padding: 10px 20px;
+    }
+
+    #menu-toggle {
+        display: block; /* Ensure button is visible */
+        background: none;
+        border: none;
+        color: white;
+        font-size: 2em;
+        cursor: pointer;
+    }
+
+    /*
+      The DESKTOP #nav-placeholder is hidden on mobile.
+      The JS will move the nav INTO the header, where the dropdown rules apply.
+    */
+    body > #nav-placeholder {
+        display: none;
+    }
+    
+    /* This rule styles the navigation ONLY when it's inside the header */
+    .main-header #nav-placeholder {
+        display: none;
+        width: 100%;
+        background: #1e1e1e;
+    }
+
+    .main-header #nav-placeholder.is-open {
+        display: block;
+    }
+
+    .main-header #nav-placeholder a {
+        border-bottom: 1px solid #444;
+    }
+
+    #content-placeholder {
+        height: auto;
+        padding: 20px;
+    }
 }
