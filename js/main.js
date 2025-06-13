@@ -32,3 +32,17 @@ document.addEventListener('DOMContentLoaded',()=>{
     pfSpan.textContent=isMobile?"mobile":"desktop";
   }
 });
+
+// Wait for the DOM to be fully loaded before running the script
+document.addEventListener("DOMContentLoaded", function() {
+    // Fetch the navigation menu HTML
+    fetch('nav.html')
+        .then(response => response.text()) // Convert the response to text
+        .then(html => {
+            // Inject the HTML into the placeholder
+            document.getElementById('nav-placeholder').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error fetching the navigation menu:', error);
+        });
+});
