@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(html => {
                 contentPlaceholder.innerHTML = html;
+                // After loading content, run the specific script for that page
                 switch (page) {
                     case 'home': initHomePage(); break;
                     case 'counter': initCounterPage(); break;
@@ -70,10 +71,12 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.text())
             .then(html => {
                 navPlaceholder.innerHTML = html;
+                // After the nav HTML is loaded, set up the sidebar toggle button inside it
+                initSidebarToggle();
             })
             .catch(error => console.error('Error fetching nav.html:', error));
     }
-
+    
     // --- Layout, Routing, and Menu Toggle Logic ---
     function handleRouteChange() {
         const page = window.location.hash.substring(1) || 'home';
@@ -91,11 +94,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function initMenuToggle() {
+        // This is for the mobile hamburger button
         const menuToggle = document.getElementById('menu-toggle');
         if (menuToggle) {
             menuToggle.addEventListener('click', () => {
                 navPlaceholder.classList.toggle('is-open');
             });
+            // Close mobile menu when a link inside it is clicked
             navPlaceholder.addEventListener('click', (e) => {
                 if (e.target.tagName === 'A' || e.target.closest('a')) {
                     navPlaceholder.classList.remove('is-open');
@@ -104,13 +109,25 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function initSidebarToggle() {
+        // This is for the desktop collapse button
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                document.body.classList.toggle('sidebar-collapsed');
+            });
+        }
+    }
+
     // --- Initial Page Load ---
-    loadNav();
+    loadNav(); // This will now also call initSidebarToggle once the nav is loaded
     initMenuToggle();
 
+    // Set up responsive layout listener
     mobileMediaQuery.addEventListener('change', handleResponsiveLayout);
-    handleResponsiveLayout(mobileMediaQuery); // Run once on load
+    handleResponsiveLayout(mobileMediaQuery); // Run once on initial load to set the correct layout
 
+    // Set up hash-based routing
     handleRouteChange(); // Handle initial page route
     window.addEventListener('hashchange', handleRouteChange); // Listen for route changes
 });

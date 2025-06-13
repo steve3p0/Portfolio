@@ -1,4 +1,7 @@
-/* Global Styles & Box Model Reset */
+/* =================================================================== */
+/* GLOBAL STYLES & BOX MODEL RESET                                     */
+/* =================================================================== */
+
 html {
     box-sizing: border-box;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -15,23 +18,40 @@ body {
 /* =================================================================== */
 
 body {
-    display: flex; /* Desktop has a side-by-side flex layout */
+    display: flex;
 }
 
-/* Hide the mobile header on desktop */
 .main-header {
     display: none;
 }
 
-/* Desktop sidebar styles */
+#nav-placeholder, #content-placeholder {
+    transition: all 0.3s ease;
+}
+
 #nav-placeholder {
     width: 260px;
     flex-shrink: 0;
     background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
+    color: white;
+}
+
+.sidebar-header {
+    display: flex;
+    /* visibility: visible; */
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+#sidebar-toggle {
+    font-size: 1.2em;
+    line-height: 1;
 }
 
 #nav-placeholder a {
-    display: block;
+    display: flex;
+    align-items: center;
     padding: 10px 20px;
     color: white;
     text-decoration: none;
@@ -41,12 +61,39 @@ body {
     background: rgba(255, 255, 255, .2);
 }
 
-/* Desktop content area styles */
 #content-placeholder {
     flex-grow: 1;
     overflow-y: auto;
     height: 100vh;
     padding: 20px 40px;
+}
+
+/* --- COLLAPSED SIDEBAR STYLES --- */
+body.sidebar-collapsed #nav-placeholder {
+    width: 80px;
+}
+body.sidebar-collapsed #content-placeholder {
+    margin-left: 80px;
+}
+
+/*
+  ▼▼▼ THIS IS THE CORRECTED RULE ▼▼▼
+  It hides the text in BOTH the header link AND the main nav links when collapsed.
+*/
+body.sidebar-collapsed .sidebar-header span,
+body.sidebar-collapsed .nav-link span {
+    display: none;
+}
+
+body.sidebar-collapsed .sidebar-header {
+    justify-content: center;
+}
+body.sidebar-collapsed .sidebar-header a {
+    font-size: 1.5rem;
+}
+body.sidebar-collapsed .nav-link {
+    justify-content: center;
+    font-size: 1.5rem;
 }
 
 
@@ -55,12 +102,11 @@ body {
 /* =================================================================== */
 
 @media (max-width: 768px) {
-    /* On mobile, use a normal top-to-bottom block layout */
+    
     body {
         display: block;
     }
 
-    /* Show the mobile header */
     .main-header {
         display: flex;
         flex-wrap: wrap;
@@ -68,11 +114,11 @@ body {
         justify-content: space-between;
         background: #333;
         color: white;
-        /* padding: 10px 20px; */
+        padding: 10px 20px;
     }
 
     #menu-toggle {
-        display: block; /* Ensure button is visible */
+        display: block;
         background: none;
         border: none;
         color: white;
@@ -80,19 +126,13 @@ body {
         cursor: pointer;
     }
 
-    /*
-      The DESKTOP #nav-placeholder is hidden on mobile.
-      The JS will move the nav INTO the header, where the dropdown rules apply.
-    */
     body > #nav-placeholder {
         display: none;
     }
     
-    /* This rule styles the navigation ONLY when it's inside the header */
     .main-header #nav-placeholder {
         display: none;
         width: 100%;
-        /* Use the same gradient as the desktop sidebar */
         background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
     }
 
@@ -100,12 +140,7 @@ body {
         display: block;
     }
 
-    .main-header #nav-placeholder a {
-        border-bottom: 1px solid #444;
-    }
-
-    #content-placeholder {
-        height: auto;
-        padding: 20px;
+    .sidebar-header {
+        display: none;
     }
 }
