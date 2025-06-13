@@ -1,51 +1,97 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // This function loads the navigation and then sets up the links
+    // --- Page-specific initialization functions ---
+
+    function initHomePage() {
+        const pfSpan = document.getElementById('platform');
+        if (pfSpan) {
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+            pfSpan.textContent = isMobile ? "a mobile device" : "a desktop computer";
+        }
+    }
+
+    function initCounterPage() {
+        const btn = document.getElementById('counter-btn');
+        if (btn) {
+            const span = document.getElementById('counter-value');
+            let count = 0;
+            btn.addEventListener('click', () => {
+                span.textContent = ++count;
+            });
+        }
+    }
+
+    function initWeatherPage() {
+        const tableBody = document.getElementById('weather-table');
+        if (tableBody) {
+            // Clear existing table data to prevent duplicates on re-load
+            tableBody.innerHTML = ''; 
+            const summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+            const today = new Date();
+            for (let i = 0; i < 5; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i + 1);
+                const c = Math.floor(Math.random() * 75 - 20);
+                const f = Math.round(c * 9 / 5 + 32);
+                const summary = summaries[Math.floor(Math.random() * summaries.length)];
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${date.toLocaleDateString()}</td><td>${c}</td><td>${f}</td><td>${summary}</td>`;
+                tableBody.appendChild(tr);
+            }
+        }
+    }
+
+    // --- Core SPA navigation and content loading ---
+
     function loadNavAndSetupLinks() {
         fetch('nav.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('nav-placeholder').innerHTML = html;
-                // Once the navigation is loaded, set up the click handlers
                 setupNavigation();
             })
             .catch(error => console.error('Error fetching nav.html:', error));
     }
 
-    // This function loads the content for a given page
     function loadContent(page) {
         fetch(`pages/${page}.html`)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Page not found');
-                }
+                if (!response.ok) { throw new Error('Page not found'); }
                 return response.text();
             })
             .then(html => {
                 document.getElementById('content-placeholder').innerHTML = html;
+                // After loading content, run the specific script for that page
+                switch (page) {
+                    case 'home':
+                        initHomePage();
+                        break;
+                    case 'counter':
+                        initCounterPage();
+                        break;
+                    case 'weather':
+                        initWeatherPage();
+                        break;
+                }
             })
             .catch(error => {
                 console.error(`Error fetching page ${page}:`, error);
-                // Optionally, load a 404 page here
                 document.getElementById('content-placeholder').innerHTML = '<h2>Page Not Found</h2>';
             });
     }
 
-    // This new function sets up the click listeners on the nav links
     function setupNavigation() {
         document.getElementById('nav-placeholder').addEventListener('click', function(event) {
-            // Check if a link (A tag) was clicked
             if (event.target.tagName === 'A') {
-                event.preventDefault(); // Stop the browser from navigating the old way
-                
-                const page = event.target.getAttribute('href'); // Get the page name (e.g., "about")
+                event.preventDefault();
+                const page = event.target.getAttribute('href');
                 if (page) {
-                    loadContent(page); // Load the new content
+                    loadContent(page);
                 }
             }
         });
     }
 
-    // Initial page load
+    // --- Initial Page Load ---
     loadNavAndSetupLinks();
     loadContent('home');
 });
