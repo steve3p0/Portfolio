@@ -68,7 +68,7 @@ body {
         justify-content: space-between;
         background: #333;
         color: white;
-        padding: 10px 20px;
+        /* padding: 10px 20px; */
     }
 
     #menu-toggle {
@@ -92,7 +92,8 @@ body {
     .main-header #nav-placeholder {
         display: none;
         width: 100%;
-        background: #1e1e1e;
+        /* Use the same gradient as the desktop sidebar */
+        background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
     }
 
     .main-header #nav-placeholder.is-open {
