@@ -1,48 +1,51 @@
-document.addEventListener('DOMContentLoaded',()=>{
-
-  /* Counter page */
-  const btn=document.getElementById('counter-btn');
-  if(btn){
-    const span=document.getElementById('counter-value');
-    let count=0;
-    btn.addEventListener('click',()=>{span.textContent=++count;});
-  }
-
-  /* Weather page */
-  const tableBody=document.getElementById('weather-table');
-  if(tableBody){
-    const summaries=["Freezing","Bracing","Chilly","Cool","Mild","Warm","Balmy","Hot","Sweltering","Scorching"];
-    const today=new Date();
-    for(let i=0;i<5;i++){
-      const date=new Date(today);
-      date.setDate(today.getDate()+i+1);
-      const c=Math.floor(Math.random()*75-20);
-      const f=Math.round(c*9/5+32);
-      const summary=summaries[Math.floor(Math.random()*summaries.length)];
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${date.toLocaleDateString()}</td><td>${c}</td><td>${f}</td><td>${summary}</td>`;
-      tableBody.appendChild(tr);
-    }
-  }
-
-  /* Platform detector on home */
-  const pfSpan=document.getElementById('platform');
-  if(pfSpan){
-    const isMobile=/Mobi|Android/i.test(navigator.userAgent);
-    pfSpan.textContent=isMobile?"mobile":"desktop";
-  }
-});
-
-// Wait for the DOM to be fully loaded before running the script
 document.addEventListener("DOMContentLoaded", function() {
-    // Fetch the navigation menu HTML
-    fetch('nav.html')
-        .then(response => response.text()) // Convert the response to text
-        .then(html => {
-            // Inject the HTML into the placeholder
-            document.getElementById('nav-placeholder').innerHTML = html;
-        })
-        .catch(error => {
-            console.error('Error fetching the navigation menu:', error);
+    // This function loads the navigation and then sets up the links
+    function loadNavAndSetupLinks() {
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('nav-placeholder').innerHTML = html;
+                // Once the navigation is loaded, set up the click handlers
+                setupNavigation();
+            })
+            .catch(error => console.error('Error fetching nav.html:', error));
+    }
+
+    // This function loads the content for a given page
+    function loadContent(page) {
+        fetch(`pages/${page}.html`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Page not found');
+                }
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById('content-placeholder').innerHTML = html;
+            })
+            .catch(error => {
+                console.error(`Error fetching page ${page}:`, error);
+                // Optionally, load a 404 page here
+                document.getElementById('content-placeholder').innerHTML = '<h2>Page Not Found</h2>';
+            });
+    }
+
+    // This new function sets up the click listeners on the nav links
+    function setupNavigation() {
+        document.getElementById('nav-placeholder').addEventListener('click', function(event) {
+            // Check if a link (A tag) was clicked
+            if (event.target.tagName === 'A') {
+                event.preventDefault(); // Stop the browser from navigating the old way
+                
+                const page = event.target.getAttribute('href'); // Get the page name (e.g., "about")
+                if (page) {
+                    loadContent(page); // Load the new content
+                }
+            }
         });
+    }
+
+    // Initial page load
+    loadNavAndSetupLinks();
+    loadContent('home');
 });
