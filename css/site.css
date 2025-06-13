@@ -1,0 +1,36 @@
+html,body{height:100%;margin:0}
+
+/* ====== SIDEBAR ======================================================= */
+.sidebar{
+  width:260px;
+  min-height:100vh;
+  background:linear-gradient(to bottom,#041b6e 0%,#2d006d 50%,#5b0060 100%);
+}
+.sidebar .nav-link{
+  color:#fff;
+  border-radius:.25rem;
+}
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover{
+  background:rgba(255,255,255,.2);
+}
+
+/* ====== TYPOGRAPHY ==================================================== */
+:root{
+  --bs-body-font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+html,body{
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+h1,h2,h3,h4,h5,h6{
+  font-weight:600;
+  line-height:1.2;
+}
+h1{font-size:2.5rem;margin-bottom:.5rem;}
+h2{font-size:2rem;margin-bottom:.5rem;}
+h3{font-size:1.75rem;}
+
+/* ====== LAYOUT ======================================================== */
+.content{
+    padding-top:1.1rem;   /* same as .NET MAUI Blazor’s app.css */
+}
