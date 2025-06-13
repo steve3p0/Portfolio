@@ -42,16 +42,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // --- Core SPA navigation and content loading ---
 
-    function loadNavAndSetupLinks() {
+    // Fetches and injects the navigation menu
+    function loadNav() {
         fetch('nav.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('nav-placeholder').innerHTML = html;
-                setupNavigation();
             })
             .catch(error => console.error('Error fetching nav.html:', error));
     }
 
+    // Fetches and injects content, then runs the correct init script
     function loadContent(page) {
         fetch(`pages/${page}.html`)
             .then(response => {
@@ -60,17 +61,12 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(html => {
                 document.getElementById('content-placeholder').innerHTML = html;
-                // After loading content, run the specific script for that page
+                
+                // After loading, run the script for that page
                 switch (page) {
-                    case 'home':
-                        initHomePage();
-                        break;
-                    case 'counter':
-                        initCounterPage();
-                        break;
-                    case 'weather':
-                        initWeatherPage();
-                        break;
+                    case 'home': initHomePage(); break;
+                    case 'counter': initCounterPage(); break;
+                    case 'weather': initWeatherPage(); break;
                 }
             })
             .catch(error => {
@@ -78,20 +74,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('content-placeholder').innerHTML = '<h2>Page Not Found</h2>';
             });
     }
+    
+    // --- NEW: Hash-based Router ---
 
-    function setupNavigation() {
-        document.getElementById('nav-placeholder').addEventListener('click', function(event) {
-            if (event.target.tagName === 'A') {
-                event.preventDefault();
-                const page = event.target.getAttribute('href');
-                if (page) {
-                    loadContent(page);
-                }
-            }
-        });
+    // This function runs when the page loads or the hash changes
+    function handleRouteChange() {
+        // Get the page name from the hash, or default to 'home'
+        // e.g., #about -> "about"
+        const page = window.location.hash.substring(1) || 'home';
+        loadContent(page);
     }
 
+    // Listen for hash changes (e.g., user clicks a link)
+    window.addEventListener('hashchange', handleRouteChange);
+
     // --- Initial Page Load ---
-    loadNavAndSetupLinks();
-    loadContent('home');
+    loadNav();
+    handleRouteChange(); // Handle initial page load (e.g., if user opens /#about directly)
 });
