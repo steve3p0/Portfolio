@@ -13,6 +13,11 @@ body {
     margin: 0;
 }
 
+#nav-placeholder hr {
+    margin: 0; /* Reduces top/bottom margin and adds some side margin */
+    border-color: rgba(255, 255, 255, 0.2); /* Makes the line more subtle */
+}
+
 /* =================================================================== */
 /* DESKTOP-FIRST LAYOUT (Default Styles)                               */
 /* =================================================================== */
@@ -32,13 +37,17 @@ body {
 #nav-placeholder {
     width: 260px;
     flex-shrink: 0;
-    background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
+    background: #000000;
     color: white;
+}
+
+#nav-placeholder ul {
+    height: 100%;
+    background: linear-gradient(to bottom,rgba(0, 0, 0, 1) 0%, rgba(11, 11, 15, 1) 35%, rgba(42, 133, 80, 1) 100%);
 }
 
 .sidebar-header {
     display: flex;
-    /* visibility: visible; */
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
@@ -68,54 +77,27 @@ body {
     padding: 20px 40px;
 }
 
-/* --- Desktop COLLAPSED SIDEBAR STYLES --- */
+/* --- COLLAPSED SIDEBAR STYLES --- */
 body.sidebar-collapsed #nav-placeholder {
     width: 80px;
 }
-body.sidebar-collapsed #content-placeholder {
+
+/* body.sidebar-collapsed #content-placeholder {
     margin-left: 80px;
-}
-
-/*
-  ▼▼▼ THIS IS THE CORRECTED RULE ▼▼▼
-  It hides the text in BOTH the header link AND the main nav links when collapsed.
-*/
-/* body.sidebar-collapsed .sidebar-header span,
-body.sidebar-collapsed .nav-link span {
-    display: none;
 } */
 
-/* body.sidebar-collapsed .sidebar-header a,
-body.sidebar-collapsed .nav-link span {
-    display: none;
-} */
-
-/* This rule hides the text SPANs when collapsed */
 body.sidebar-collapsed #nav-placeholder .sidebar-header a,
 body.sidebar-collapsed #nav-placeholder .nav-link span {
     display: none;
 }
-
-/* body.sidebar-collapsed .sidebar-header span,
-body.sidebar-collapsed .sidebar-header a,
-body.sidebar-collapsed .nav-link span {
-    display: none;
-} */
-
-/* end of the corrected rule */
-
-
 body.sidebar-collapsed .sidebar-header {
     justify-content: center;
 }
-body.sidebar-collapsed .sidebar-header a {
-    font-size: 1.5rem;
-}
+body.sidebar-collapsed .sidebar-header a,
 body.sidebar-collapsed .nav-link {
     justify-content: center;
     font-size: 1.5rem;
 }
-
 
 
 /* =================================================================== */
@@ -133,20 +115,25 @@ body.sidebar-collapsed .nav-link {
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        /* background: #333; */
-        background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
+        background: #000000;
         color: white;
+    }
+
+    .main-header h1 {
+        padding: 10px 20px;
+    }
+
+    .main-header #menu-toggle {
         padding: 10px 20px;
     }
 
     #menu-toggle {
         display: block;
         background: none;
-        /* border: none; */
+        border: none;
         color: white;
         font-size: 2em;
         cursor: pointer;
-        padding: 0 0.5rem;
     }
 
     body > #nav-placeholder {
@@ -156,14 +143,25 @@ body.sidebar-collapsed .nav-link {
     .main-header #nav-placeholder {
         display: none;
         width: 100%;
-        background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
+        background: #000000;
     }
 
     .main-header #nav-placeholder.is-open {
         display: block;
     }
 
-    .sidebar-header {
+    .main-header #nav-placeholder ul {
+        height: 100%;
+        background: linear-gradient(to bottom,rgba(0, 0, 0, 1) 0%, rgba(11, 11, 15, 1) 35%, rgba(42, 133, 80, 1) 100%);
+    }
+
+    /* This single rule now correctly handles the header inside the mobile nav */
+    .main-header #nav-placeholder .sidebar-header {
         display: none;
+    }
+
+    #content-placeholder {
+        height: auto;
+        padding: 20px;
     }
 }

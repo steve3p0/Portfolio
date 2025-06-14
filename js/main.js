@@ -116,7 +116,20 @@ document.addEventListener("DOMContentLoaded", function() {
         const sidebarToggle = document.getElementById('sidebar-toggle');
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', () => {
+                // First, toggle the class on the body as before
                 document.body.classList.toggle('sidebar-collapsed');
+
+                // Now, find the icon inside the button
+                const icon = sidebarToggle.querySelector('i');
+
+                // Check if the sidebar is now collapsed and change the icon's class accordingly
+                if (document.body.classList.contains('sidebar-collapsed')) {
+                    // It's collapsed, so show the 'open' icon
+                    icon.className = 'bi bi-chevron-double-right';
+                } else {
+                    // It's expanded, so show the 'close' icon
+                    icon.className = 'bi bi-chevron-double-left';
+                }
             });
         }
     }
