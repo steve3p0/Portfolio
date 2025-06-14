@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const navPlaceholder = document.getElementById('nav-placeholder');
     const contentPlaceholder = document.getElementById('content-placeholder');
     const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
+    // NEW: Define a media query for the tablet breakpoint
+    // const tabletMediaQuery = window.matchMedia('(max-width: 992px)');
 
     // --- Page-specific initialization functions ---
     function initHomePage() {
@@ -120,14 +122,21 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // --- Initial Page Load ---
-    loadNav(); // This will now also call initSidebarToggle once the nav is loaded
+    loadNav();
     initMenuToggle();
 
     // Set up responsive layout listener
     mobileMediaQuery.addEventListener('change', handleResponsiveLayout);
-    handleResponsiveLayout(mobileMediaQuery); // Run once on initial load to set the correct layout
+    handleResponsiveLayout(mobileMediaQuery);
 
     // Set up hash-based routing
-    handleRouteChange(); // Handle initial page route
-    window.addEventListener('hashchange', handleRouteChange); // Listen for route changes
+    handleRouteChange();
+    window.addEventListener('hashchange', handleRouteChange);
+
+    // ▼▼▼ ADD THIS NEW LOGIC ▼▼▼
+    // On page load, check if we are in the tablet range and should start collapsed.
+    if (tabletMediaQuery.matches && !mobileMediaQuery.matches) {
+        // This is true for screen widths between 769px and 992px
+        document.body.classList.add('sidebar-collapsed');
+    }
 });

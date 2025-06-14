@@ -68,7 +68,7 @@ body {
     padding: 20px 40px;
 }
 
-/* --- COLLAPSED SIDEBAR STYLES --- */
+/* --- Desktop COLLAPSED SIDEBAR STYLES --- */
 body.sidebar-collapsed #nav-placeholder {
     width: 80px;
 }
@@ -80,10 +80,30 @@ body.sidebar-collapsed #content-placeholder {
   ▼▼▼ THIS IS THE CORRECTED RULE ▼▼▼
   It hides the text in BOTH the header link AND the main nav links when collapsed.
 */
-body.sidebar-collapsed .sidebar-header span,
+/* body.sidebar-collapsed .sidebar-header span,
 body.sidebar-collapsed .nav-link span {
     display: none;
+} */
+
+/* body.sidebar-collapsed .sidebar-header a,
+body.sidebar-collapsed .nav-link span {
+    display: none;
+} */
+
+/* This rule hides the text SPANs when collapsed */
+body.sidebar-collapsed #nav-placeholder .sidebar-header a,
+body.sidebar-collapsed #nav-placeholder .nav-link span {
+    display: none;
 }
+
+/* body.sidebar-collapsed .sidebar-header span,
+body.sidebar-collapsed .sidebar-header a,
+body.sidebar-collapsed .nav-link span {
+    display: none;
+} */
+
+/* end of the corrected rule */
+
 
 body.sidebar-collapsed .sidebar-header {
     justify-content: center;
@@ -95,6 +115,7 @@ body.sidebar-collapsed .nav-link {
     justify-content: center;
     font-size: 1.5rem;
 }
+
 
 
 /* =================================================================== */
@@ -112,7 +133,8 @@ body.sidebar-collapsed .nav-link {
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        background: #333;
+        /* background: #333; */
+        background: linear-gradient(to bottom, #041b6e 0%, #2d006d 50%, #5b0060 100%);
         color: white;
         padding: 10px 20px;
     }
@@ -120,10 +142,11 @@ body.sidebar-collapsed .nav-link {
     #menu-toggle {
         display: block;
         background: none;
-        border: none;
+        /* border: none; */
         color: white;
         font-size: 2em;
         cursor: pointer;
+        padding: 0 0.5rem;
     }
 
     body > #nav-placeholder {
