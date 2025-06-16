@@ -14,8 +14,8 @@ body {
 }
 
 #nav-placeholder hr {
-    margin: 0; /* Reduces top/bottom margin and adds some side margin */
-    border-color: rgba(255, 255, 255, 0.2); /* Makes the line more subtle */
+    margin: 0;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* =================================================================== */
@@ -31,7 +31,7 @@ body {
 }
 
 #nav-placeholder, #content-placeholder {
-    transition: all 0.3s ease;
+    transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
 #nav-placeholder {
@@ -39,10 +39,19 @@ body {
     flex-shrink: 0;
     background: #000000;
     color: white;
+    
+    /* Make the sidebar sticky and a flex container */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Allow the list of links to scroll if it overflows */
 #nav-placeholder ul {
-    height: 100%;
+    overflow-y: auto;
+    flex-grow: 1; /* Allows the list to fill remaining space */
     background: linear-gradient(to bottom,rgba(0, 0, 0, 1) 0%, rgba(11, 11, 15, 1) 35%, rgba(42, 133, 80, 1) 100%);
 }
 
@@ -51,6 +60,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 #sidebar-toggle {
@@ -72,8 +82,6 @@ body {
 
 #content-placeholder {
     flex-grow: 1;
-    overflow-y: auto;
-    height: 100vh;
     padding: 20px 40px;
 }
 
@@ -113,8 +121,6 @@ body.sidebar-collapsed .nav-link {
         justify-content: space-between;
         background: #000000;
         color: white;
-        
-        /* make sure the header is sticky */
         position: sticky;
         top: 0;
         left: 0;
@@ -153,7 +159,7 @@ body.sidebar-collapsed .nav-link {
     }
 
     .main-header #nav-placeholder ul {
-        height: 100%;
+        height: auto; /* Let content determine height */
         background: linear-gradient(to bottom,rgba(0, 0, 0, 1) 0%, rgba(11, 11, 15, 1) 35%, rgba(42, 133, 80, 1) 100%);
     }
 
