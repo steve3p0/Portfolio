@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // NEW: Define a media query for the tablet breakpoint
     // const tabletMediaQuery = window.matchMedia('(max-width: 992px)');
 
-    // --- Page-specific initialization functions ---
+        // --- Page-specific initialization functions ---
     function initHomePage() {
         const pfSpan = document.getElementById('platform');
         if (pfSpan) {
@@ -15,36 +15,44 @@ document.addEventListener("DOMContentLoaded", function() {
             pfSpan.textContent = isMobile ? "a mobile device" : "a desktop computer";
         }
     }
+    
+    function initHobbiesPage() {
+        // --- Weather Card ---
+        const weatherCard = document.getElementById('weather-card-content');
+        if (weatherCard) {
+            const tempC = Math.floor(Math.random() * 20 + 5); // Random temp between 5-25 C
+            const tempF = Math.round(tempC * 9 / 5 + 32);
+            const summaries = ["Clear", "Partly Cloudy", "Showers", "Overcast"];
+            const summary = summaries[Math.floor(Math.random() * summaries.length)];
+            weatherCard.innerHTML = `
+                <h5 class="card-title">${tempF}°F / ${tempC}°C</h5>
+                <p class="card-text">${summary}</p>
+                <p class="card-text"><small class="text-muted">Updated just now</small></p>
+            `;
+        }
 
-    function initCounterPage() {
-        const btn = document.getElementById('counter-btn');
-        if (btn) {
-            const span = document.getElementById('counter-value');
-            let count = 0;
-            btn.addEventListener('click', () => {
-                span.textContent = ++count;
-            });
+        // --- Timbers News Card (Simulated) ---
+        const timbersCard = document.getElementById('timbers-news-feed');
+        if (timbersCard) {
+            timbersCard.innerHTML = `
+                <ul class="list-unstyled">
+                    <li><a href="#">Timbers Secure Victory in Rivalry Match</a></li>
+                    <li class="mt-2"><a href="#">Key Player Signs Contract Extension</a></li>
+                    <li class="mt-2"><a href="#">Upcoming Match Preview</a></li>
+                </ul>
+            `;
+        }
+
+        // --- Hockey Team Card ---
+        const hockeyCard = document.getElementById('hockey-feed');
+        if (hockeyCard) {
+            hockeyCard.innerHTML = `
+                <p>Latest results and schedule for my beer league team.</p>
+                <a href="https://mountainview.ezleagues.ezfacility.com/teams/3068416/3rd-Rock.aspx?framed=1" class="btn btn-success" target="_blank" rel="noopener noreferrer">View Team Page</a>
+            `;
         }
     }
 
-    function initWeatherPage() {
-        const tableBody = document.getElementById('weather-table');
-        if (tableBody) {
-            tableBody.innerHTML = '';
-            const summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
-            const today = new Date();
-            for (let i = 0; i < 5; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i + 1);
-                const c = Math.floor(Math.random() * 75 - 20);
-                const f = Math.round(c * 9 / 5 + 32);
-                const summary = summaries[Math.floor(Math.random() * summaries.length)];
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${date.toLocaleDateString()}</td><td>${c}</td><td>${f}</td><td>${summary}</td>`;
-                tableBody.appendChild(tr);
-            }
-        }
-    }
 
     // --- Core SPA & Navigation Logic ---
     function loadContent(page) {
