@@ -2,22 +2,30 @@
   <h1>Contact</h1>
   <p class="lead">Feel free to reach out via the form below.</p>
 
-  <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+  <!-- The action and method attributes are removed -->
+  <form id="contact-form">
 
+    <!-- The access_key is still needed -->
     <input type="hidden" name="access_key" value="cad911ea-a8ea-40bd-9925-5016bfeab7d7" />
 
     <div class="mb-3">
       <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" id="first_name" required>
+      <!-- 'name' attribute added -->
+      <input type="text" class="form-control" id="name" name="name" required>
     </div>
     <div class="mb-3">
       <label for="email" class="form-label">Email Address</label>
-      <input type="email" class="form-control" id="email" required>
+      <!-- 'name' attribute added -->
+      <input type="email" class="form-control" id="email" name="email" required>
     </div>
     <div class="mb-3">
       <label for="message" class="form-label">Message</label>
-      <textarea class="form-control" id="message" rows="5" required></textarea>
+      <!-- 'name' attribute added -->
+      <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
     </div>
+
+    <!-- The redirect input is no longer needed -->
+
     <button type="submit" class="btn btn-primary">Send Message</button>
   </form>
 

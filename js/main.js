@@ -9,10 +9,47 @@ document.addEventListener("DOMContentLoaded", function() {
     function initContactPage() {
         const form = document.getElementById('contact-form');
         if (form) {
-            form.addEventListener('submit', (e) => {
-                // e.preventDefault();
-                alert('Thank you for reaching out!');
-                form.reset();
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML;
+                
+                submitButton.disabled = true;
+                submitButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...`;
+
+                const formData = new FormData(form);
+                const object = {};
+                formData.forEach((value, key) => {
+                    object[key] = value;
+                });
+                const json = JSON.stringify(object);
+
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: json
+                    });
+                    
+                    const result = await response.json();
+                    if (result.success) {
+                        // On success, load our local success page content
+                        loadContent('success');
+                    } else {
+                        console.error('Form submission failed:', result);
+                        alert(`Error: ${result.message}`);
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonText;
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    alert('An error occurred. Please try again.');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
             });
         }
     }
@@ -134,13 +171,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 contentPlaceholder.innerHTML = html;
                 switch (page) {
                     case 'hobbies': initHobbiesPage(); break;
+                    case 'contact':  initContactPage(); break;
                     case 'home': // No specific JS needed for home
                     case 'about':
                     case 'courses':
                     case 'projects':
-                        break;
-                    case 'contact':
-                        initContactPage();
                         break;
                 }
             })
