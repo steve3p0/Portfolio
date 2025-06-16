@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (form) {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                alert('Thank you for your message! (This is a demo)');
+                alert('Thank you for reaching out!');
                 form.reset();
             });
         }
